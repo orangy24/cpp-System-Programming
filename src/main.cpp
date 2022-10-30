@@ -1,9 +1,33 @@
 #include <iostream>
 #include <shared_pointer.hpp>
 #include <shape.hpp>
+#include <thread>
+#include <chrono>
+#include <mutex>
+#include <thread_manage.hpp>
+
+using namespace std;
+mutex output_lock;
+void func(const char* name) {
+	std::this_thread::sleep_for(100ms);
+	// lock_guard<mutex> lk{output_lock};
+	cout<<"i am a thread"<<name<<endl;
+
+}
 int main(int argc, char *argv[])
 {
-	std::cout << "Hello world!" << std::endl;
+
+	oops();
+	background_task f;
+	std::thread my_thread(f);
+	std::thread my_thread2([](){
+		do_some_work();
+	});
+
+	my_thread.join();
+	my_thread2.join();
+
+
 	// int* p = new int(5);
 	// shared_pointer<int> ptr = shared_pointer(p);
 	shape* item = new shape();
@@ -34,4 +58,23 @@ int main(int argc, char *argv[])
 	std::cout<<"ptr 1 reference count"<<ptr3.use_count()<<std::endl;
 	}
 	std::cout<<"ptr 1 reference count"<<ptr1.use_count()<<std::endl;
+
+
+	test_thread_safe_stack();
+	process_data();
+
+	other_try_init();
+	other_try_init();
+
+	std::thread t1(produce);
+	// produce();
+
+	// thread t1
+	std::thread t3(comsume);
+	std::thread t2(comsume);
+	
+
+	t1.detach();
+	t2.detach();
+	t3.detach();
 }

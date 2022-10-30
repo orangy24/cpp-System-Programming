@@ -69,17 +69,19 @@ class shared_count {
     long m_count;
 };
 template<typename T>
-class shared_ptr {
+class my_shared_ptr {
+
  template<typename U>
- friend class shared_ptr;
+ friend class my_shared_ptr;
+
  public:
-    explicit shared_ptr(T* ptr = nullptr) : m_ptr(ptr) {
+    explicit my_shared_ptr(T* ptr = nullptr) : m_ptr(ptr) {
         if (ptr) {
             m_shared_count = new shared_count();
         }
     }
 
-    shared_ptr(const shared_ptr& other) {
+    my_shared_ptr(const my_shared_ptr& other) {
         // copy pointer
         m_ptr = other.m_ptr;
 
@@ -91,7 +93,7 @@ class shared_ptr {
     }
 
     template <typename U> // for any type
-    shared_ptr(const shared_ptr<U>& other) {
+    my_shared_ptr(const my_shared_ptr<U>& other) {
         // copy pointer
         m_ptr = other.m_ptr;
 
@@ -103,7 +105,7 @@ class shared_ptr {
     }
 
     template <typename U> // for any type, for move constructor
-    shared_ptr(const shared_ptr<U>&& other) {
+    my_shared_ptr(const my_shared_ptr<U>&& other) {
         // copy pointer
         m_ptr = other.m_ptr;
 
@@ -122,14 +124,14 @@ class shared_ptr {
         }
     }
 
-    ~shared_ptr() {
+    ~my_shared_ptr() {
         if (m_ptr && !m_shared_count->reduce_count()) {
             delete m_ptr;
             delete m_shared_count;
         }
     }
     //swap is 
-    void swap(shared_ptr& rhs) {
+    void swap(my_shared_ptr& rhs) {
         using std::swap;
         swap(m_ptr, rhs.m_ptr);
         swap(m_shared_count, rhs.m_shared_count);
